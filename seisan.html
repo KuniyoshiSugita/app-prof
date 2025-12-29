@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Genba原価日報 - 取扱説明書</title>
+    <style>
+         :root {
+            --bg: #0b1020;
+            --card: #111831;
+            --muted: #a9b2d1;
+            --text: #eef1ff;
+            --accent: #4aa3ff;
+            --accent2: #7c5cff;
+            --line: rgba(255, 255, 255, .08);
+            --good: #34d399;
+            --warn: #fbbf24;
+            --bad: #fb7185;
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+        }
+        
+        * {
+            box-sizing: border-box
+        }
+        
+        body {
+            margin: 0;
+            font-family: var(--sans);
+            background: radial-gradient(1200px 800px at 20% -10%, rgba(124, 92, 255, .35), transparent 55%), radial-gradient(1200px 800px at 110% 10%, rgba(74, 163, 255, .35), transparent 55%), var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none
+        }
+        
+        a:hover {
+            text-decoration: underline
+        }
+        
+        header {
+            padding: 28px 18px 18px;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .04), transparent);
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(8px);
+            z-index: 5;
+        }
+        
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 18px 54px;
+        }
+        
+        .brand {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 8px 28px rgba(74, 163, 255, .25);
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+        }
+        
+        h1 {
+            font-size: 18px;
+            margin: 0
+        }
+        
+        .sub {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 2px
+        }
+        
+        main {
+            padding-top: 20px
+        }
+        
+        .grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: 320px 1fr;
+            align-items: start;
+        }
+        
+        @media (max-width: 980px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+            header {
+                position: relative
+            }
+        }
+        
+        .card {
+            background: rgba(17, 24, 49, .72);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .25);
+        }
+        
+        .toc a {
+            display: block;
+            padding: 8px 10px;
+            border-radius: 12px
+        }
+        
+        .toc a:hover {
+            background: rgba(255, 255, 255, .05)
+        }
+        
+        h2 {
+            margin: 18px 0 10px;
+            font-size: 18px
+        }
+        
+        h3 {
+            margin: 14px 0 8px;
+            font-size: 15px
+        }
+        
+        p {
+            margin: 8px 0
+        }
+        
+        ul {
+            margin: 8px 0 8px 1.2em
+        }
+        
+        li {
+            margin: 6px 0
+        }
+        
+        .pill {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .03);
+            color: var(--muted);
+            font-size: 12px;
+            margin: 6px 6px 0 0;
+            white-space: nowrap;
+        }
+        
+        .kbd {
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: .1em .45em;
+            border: 1px solid var(--line);
+            border-bottom-color: rgba(255, 255, 255, .22);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .04)
+        }
+        
+        .callout {
+            border-left: 3px solid var(--accent);
+            background: rgba(74, 163, 255, .08);
+            padding: 12px 12px 12px 12px;
+            border-radius: 14px;
+            margin: 12px 0;
+        }
+        
+        .warn {
+            border-left-color: var(--warn);
+            background: rgba(251, 191, 36, .08)
+        }
+        
+        .good {
+            border-left-color: var(--good);
+            background: rgba(52, 211, 153, .08)
+        }
+        
+        .bad {
+            border-left-color: var(--bad);
+            background: rgba(251, 113, 133, .08)
+        }
+        
+        code,
+        pre {
+            font-family: var(--mono)
+        }
+        
+        pre {
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, .35);
+            border: 1px solid var(--line);
+            overflow: auto;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            margin: 10px 0;
+        }
+        
+        .table th,
+        .table td {
+            padding: 10px 10px;
+            border-bottom: 1px solid var(--line);
+            border-right: 1px solid var(--line);
+            text-align: left;
+            vertical-align: top;
+            font-size: 13px;
+        }
+        
+        .table th {
+            color: var(--muted);
+            background: rgba(255, 255, 255, .03)
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none
+        }
+        
+        .table td:last-child,
+        .table th:last-child {
+            border-right: none
+        }
+        
+        footer {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wrap">
+            <div class="brand">
+                <div class="logo">原価</div>
+                <div>
+                    <h1>Genba原価日報｜取扱説明書</h1>
+                    <div class="sub">労務・機械・車両・材料・雑費・協力会社を日別集計／CSV出力対応</div>
+                </div>
+            </div>
+            <div style="margin-top:10px">
+                <span class="pill">対象：iPad / iPhone</span>
+                <span class="pill">CSV：Excel向け（日本語文字化け対策対応）</span>
+                <span class="pill">データ保存：端末内（CoreData）</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <div class="grid">
+            <!-- TOC -->
+            <aside class="card toc">
+                <h2 style="margin-top:0">目次</h2>
+                <a href="#about">1. アプリ概要</a>
+                <a href="#start">2. はじめかた</a>
+                <a href="#project">3. 工事（プロジェクト）の操作</a>
+                <a href="#workday">4. 作業日（WorkDay）の操作</a>
+                <a href="#detail">5. 日報（内訳）の入力</a>
+                <a href="#editdelete">6. 編集・削除の方法</a>
+                <a href="#history">7. 入力履歴（候補表示）の使い方</a>
+                <a href="#csv">8. CSV出力（Excelで開く）</a>
+                <a href="#tips">9. 便利な使い方／運用のコツ</a>
+                <a href="#trouble">10. よくある質問（FAQ）</a>
+                <a href="#privacy">11. データとプライバシー</a>
+                <a href="#support">12. サポート情報</a>
+            </aside>
+
+            <!-- CONTENT -->
+            <section class="card">
+                <section id="about">
+                    <h2>1. アプリ概要</h2>
+                    <p>
+                        <b>Genba原価日報</b> は、現場の日報を「労務・機械・車両・材料・雑費・協力会社（下請け）」ごとに入力し、
+                        <b>日別に集計</b>して <b>CSVで出力</b>できる原価管理アプリです。
+                    </p>
+
+                    <table class="table">
+                        <tr>
+                            <th>できること</th>
+                            <th>内容</th>
+                        </tr>
+                        <tr>
+                            <td>日報入力</td>
+                            <td>作業日ごとに、職種／機械／車両／材料／雑費／協力会社を追加・編集・削除</td>
+                        </tr>
+                        <tr>
+                            <td>履歴入力</td>
+                            <td>過去に使った名称や単価を候補として表示し、タップで入力可能</td>
+                        </tr>
+                        <tr>
+                            <td>CSV出力</td>
+                            <td>日別の「単価・数量」2列構成で出力。<b>同名＋同単価は同じ行に統合</b>し、同日の数量は自動合算</td>
+                        </tr>
+                    </table>
+
+                    <div class="callout good">
+                        <b>ポイント：</b>同じ日・同じ項目・同単価の入力が複数あっても、CSVでは数量が合算されます。<br/> 雑費／協力会社は「数量がない」扱いですが、CSVでは数量列に <b>1</b> を出力する設定にできます（運用しやすい形式）。
+                    </div>
+                </section>
+
+                <section id="start">
+                    <h2>2. はじめかた</h2>
+                    <ol>
+                        <li>アプリを起動</li>
+                        <li>左側の一覧で <b>「工事を追加」</b> を押す</li>
+                        <li>工事を選択し、右側で <b>「作業日を追加」</b> を押す</li>
+                        <li>日付を開き、各項目（労務／機械／車両…）を追加していく</li>
+                    </ol>
+
+                    <div class="callout warn">
+                        <b>小さい端末（例：iPhone 13 mini）</b> では入力シート内が縦スクロールできるようになっています。<br/> それでもキーボードで下部が隠れる場合は、入力欄をタップ→画面を少し上にスクロールして入力してください。
+                    </div>
+                </section>
+
+                <section id="project">
+                    <h2>3. 工事（プロジェクト）の操作</h2>
+                    <h3>3-1. 工事を追加</h3>
+                    <ul>
+                        <li>左側の工事一覧で <b>「工事を追加」</b> を押す</li>
+                        <li>工事名を入力して保存</li>
+                    </ul>
+
+                    <h3>3-2. 工事を選択</h3>
+                    <p>左のリストから工事名をタップすると、右側に作業日一覧が表示されます。</p>
+                </section>
+
+                <section id="workday">
+                    <h2>4. 作業日（WorkDay）の操作</h2>
+                    <h3>4-1. 作業日を追加</h3>
+                    <ul>
+                        <li>右側下部の <b>「作業日を追加」</b> を押す</li>
+                        <li>日付を選んで保存</li>
+                    </ul>
+
+                    <h3>4-2. 作業日を開く</h3>
+                    <p>作業日カードをタップすると、日報詳細画面へ移動します。</p>
+                </section>
+
+                <section id="detail">
+                    <h2>5. 日報（内訳）の入力</h2>
+                    <p>日報詳細画面で、カテゴリごとに「＋追加」ボタンから登録します。</p>
+
+                    <table class="table">
+                        <tr>
+                            <th>カテゴリ</th>
+                            <th>入力内容（例）</th>
+                            <th>計算</th>
+                        </tr>
+                        <tr>
+                            <td>労務費</td>
+                            <td>職種 / 人数 / 賃金</td>
+                            <td>人数 × 賃金</td>
+                        </tr>
+                        <tr>
+                            <td>機械費</td>
+                            <td>機械名 / 日数 / 単価</td>
+                            <td>日数 × 単価</td>
+                        </tr>
+                        <tr>
+                            <td>車両費</td>
+                            <td>車両名 / 台数(回数) / 単価</td>
+                            <td>台数 × 単価</td>
+                        </tr>
+                        <tr>
+                            <td>材料費</td>
+                            <td>材料名 / 数量 / 単価</td>
+                            <td>数量 × 単価</td>
+                        </tr>
+                        <tr>
+                            <td>雑費</td>
+                            <td>項目名 / 金額</td>
+                            <td>金額（固定）</td>
+                        </tr>
+                        <tr>
+                            <td>協力会社費</td>
+                            <td>会社名 / 金額</td>
+                            <td>金額（固定）</td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section id="editdelete">
+                    <h2>6. 編集・削除の方法</h2>
+
+                    <h3>6-1. 明細（労務・機械・車両・材料・雑費・協力会社）を編集</h3>
+                    <p>各明細行をタップすると編集シートが開きます。</p>
+
+                    <h3>6-2. 明細を削除</h3>
+                    <p>明細行を <b>左にスワイプ</b> → <b>削除</b> を選びます。</p>
+                    <div class="callout">
+                        <b>操作のコツ：</b> iPad ではスワイプが効きにくい場合、行を長押しして <b>コンテキストメニュー</b> から削除できる構成にもできます。
+                    </div>
+
+                    <h3>6-3. 作業日（WorkDay）を削除</h3>
+                    <p>
+                        作業日一覧（工事詳細画面）で、<b>Edit</b> ボタン（または編集モード）を有効にして削除します。<br/> 端末やレイアウトにより「スワイプ削除」が効かない場合は、まず <b>Edit</b> を押して削除してください。
+                    </p>
+
+                    <div class="callout warn">
+                        <b>注意：</b>削除は取り消しできません。必要な場合はCSV出力してバックアップしてから削除してください。
+                    </div>
+                </section>
+
+                <section id="history">
+                    <h2>7. 入力履歴（候補表示）の使い方</h2>
+                    <p>
+                        機械・車両・材料・雑費・協力会社などは、過去の入力から <b>名称</b> や <b>単価</b> の候補を表示し、タップで入力できます。
+                    </p>
+                    <ul>
+                        <li>候補が出ない場合：その工事（Project）内に過去データがない可能性があります</li>
+                        <li>候補が多い場合：よく使う名称を統一（例：表記ゆれを減らす）すると探しやすくなります</li>
+                    </ul>
+                </section>
+
+                <section id="csv">
+                    <h2>8. CSV出力（Excelで開く）</h2>
+
+                    <h3>8-1. CSVを出力する</h3>
+                    <ol>
+                        <li>工事詳細画面の右上にある <b>CSV出力</b> を押す</li>
+                        <li>保存先（ファイル）を選んで保存</li>
+                    </ol>
+
+                    <h3>8-2. 出力形式</h3>
+                    <p>CSVは「日付ごとに <b>単価列</b> と <b>数量列</b> の2列」を持ちます。</p>
+                    <ul>
+                        <li><b>同名＋同単価</b> → 同じ行にまとめます</li>
+                        <li><b>同じ日</b> に複数入力 → 数量を自動合算します</li>
+                        <li><b>雑費／協力会社</b> → 金額は単価列に、数量列は運用に合わせて 1（または空欄）にできます</li>
+                    </ul>
+
+                    <h3>8-3. 文字化けしないコツ（Excel）</h3>
+                    <div class="callout good">
+                        <b>推奨：</b>日本語Excelでは、CSVを Shift-JIS で保存すると文字化けしにくいです。<br/> 本アプリのCSV出力は Shift-JIS で保存する構成にできます（実装済みの場合はそのままでOK）。
+                    </div>
+
+                    <p>Excelで開く際のおすすめ手順：</p>
+                    <ul>
+                        <li>Excelの「データ」→「テキスト/CSVから」→ エンコードを選択（必要な場合）</li>
+                        <li>うまくいかない場合は、Shift-JISで保存されたCSVを利用</li>
+                    </ul>
+                </section>
+
+                <section id="tips">
+                    <h2>9. 便利な使い方／運用のコツ</h2>
+                    <ul>
+                        <li><b>表記ゆれを減らす：</b>「2tトラック」「2t トラック」など表記が混ざると別行になります。できれば統一してください。</li>
+                        <li><b>単価が同じものはまとめやすい：</b>同名＋同単価なら、CSV上で同じ行に集約されます。</li>
+                        <li><b>日々のバックアップ：</b>定期的にCSV出力してファイルに保存すると安心です。</li>
+                        <li><b>入力が多い日：</b>まず労務→機械→車両→材料→雑費→協力会社の順に入れると漏れが減ります。</li>
+                    </ul>
+                </section>
+
+                <section id="trouble">
+                    <h2>10. よくある質問（FAQ）</h2>
+
+                    <h3>Q. スワイプ削除ができません</h3>
+                    <p>
+                        A. 画面によってはスワイプが効きにくい場合があります。<br/> 作業日一覧は <b>Edit</b> を押して削除、明細は行の <b>左スワイプ</b> または <b>長押しメニュー</b> を使ってください。
+                    </p>
+
+                    <h3>Q. 小さい端末で入力欄が見えません</h3>
+                    <p>
+                        A. 入力シートが縦スクロール対応です。キーボード表示中に隠れる場合は、フォームを上にスクロールしてください。
+                    </p>
+
+                    <h3>Q. CSVに同じ車両が複数あったのに、1つしか出ません</h3>
+                    <p>
+                        A. 仕様として、<b>同名＋同単価</b> は同じ行にまとめています。その代わり、数量（台数）が合算されます。
+                    </p>
+
+                    <h3>Q. Excelで日本語が文字化けします</h3>
+                    <p>
+                        A. CSVを Shift-JIS で保存しているか確認してください。Excelのインポート機能でエンコードを指定するのも有効です。
+                    </p>
+
+                </section>
+
+                <section id="privacy">
+                    <h2>11. データとプライバシー</h2>
+                    <ul>
+                        <li>入力データは端末内に保存されます（CoreData）。</li>
+                        <li>CSV出力はユーザーが選択した保存先に書き出されます。</li>
+                        <li>クラウド同期の有無は実装仕様に依存します（iCloud Driveへ保存した場合はiCloud側で管理されます）。</li>
+                    </ul>
+                    <div class="callout warn">
+                        <b>注意：</b>端末を初期化・アプリ削除するとデータが消える可能性があります。必要に応じてCSVでバックアップしてください。
+                    </div>
+                </section>
+
+                <section id="support">
+                    <h2>12. サポート情報</h2>
+                    <p>
+                        不具合報告の際は、以下があると対応が早いです。
+                    </p>
+                    <ul>
+                        <li>端末（iPad / iPhone）とOSバージョン</li>
+                        <li>問題が起きた画面のスクリーンショット</li>
+                        <li>再現手順（例：「工事A001→12/17→車両→2tトラック削除で…」）</li>
+                    </ul>
+
+                    <footer>
+                        <div>© Genba原価日報（取扱説明書HTMLテンプレート）</div>
+                        <div style="margin-top:6px">※ 本書はアプリの画面/機能に合わせて随時更新してください。</div>
+                    </footer>
+                </section>
+
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>
